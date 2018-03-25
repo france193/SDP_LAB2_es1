@@ -89,6 +89,7 @@ void parent(char *filename) {
 
     while (true) {
         while (fgets(line, N, fp) != NULL) {
+            sleep(1);
             if (print) {
                 fprintf(stdout, "%s", line);
             }
@@ -132,16 +133,16 @@ void child() {
 void parent_manager(int signal) {
     switch (signal) {
         case SIGUSR1:
-            fprintf(stdout, "> (PARENT) Received SIGUSER1!\n");
+            fprintf(stdout, "\n> (PARENT) Received SIGUSER1!\n");
             print = !print;
             break;
 
         case SIGUSR2:
-            fprintf(stdout, "> (PARENT) Received SIGUSER2!\n");
+            fprintf(stdout, "\n> (PARENT) Received SIGUSER2!\n");
             exit(0);
 
         default:
-            fprintf(stderr, "Caught wrong signal: %d\n", signal);
+            fprintf(stderr, "\nCaught wrong signal: %d\n", signal);
             return;
     }
 }
@@ -149,13 +150,13 @@ void parent_manager(int signal) {
 void child_manager(int signal) {
     switch (signal) {
         case SIGUSR2:
-            fprintf(stdout, "\t> (CHILD) Received SIGUSER2!\n");
+            fprintf(stdout, "\n\t> (CHILD) Received SIGUSER2!\n");
             // child_1 receives SIGUSER2 from child_2 and forward it to parent
             kill(getppid(), SIGUSR2);
             exit(0);
 
         default:
-            fprintf(stderr, "Caught wrong signal: %d\n", signal);
+            fprintf(stderr, "\nCaught wrong signal: %d\n", signal);
             break;
     }
 }
